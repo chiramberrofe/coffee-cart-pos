@@ -315,20 +315,7 @@ export default function App() {
     setItemM(null);
   }
 
-  function squareUrl() {
-    const cents = Math.round(tot*100);
-    const isAndroid = /android/i.test(navigator.userAgent);
-    const data = {
-      amount_money: { amount: cents, currency_code: "AUD" },
-      callback_url: VERCEL_URL,
-      client_id: SQUARE_APP_ID,
-      version: "1.3",
-      notes: (cName||"Guest")+" - Coffee Cart"
-    };
-    return isAndroid
-      ? "intent://squareup.com/pos/charge?amount_money="+cents+"&currency_code=AUD&notes="+encodeURIComponent((cName||"Guest")+" - Coffee Cart")+"#Intent;scheme=https;package=com.squareup;end"
-      : "square-commerce-v1://payment/create?data="+encodeURIComponent(JSON.stringify(data));
-  }
+  
 
   // ── Reports ─────────────────────────────────────────────────────
   const filHist = useCallback(() => {
@@ -767,9 +754,13 @@ export default function App() {
             <div style={{display:"flex",gap:7}}>
               <Btn ghost onClick={()=>setChkOpen(false)}>Back</Btn>
               {              payMethod==="square"
-                ? <a href={squareUrl()} onClick={()=>setSqPending(true)} style={{flex:1,padding:"11px 14px",borderRadius:9,border:"none",background:"#16a34a",color:"#fff",fontWeight:700,fontSize:13,cursor:"pointer",textAlign:"center",textDecoration:"none",display:"block"}}>
-                    💳 Charge {fmt(tot)} via Square
-                  </a>
+                ? <Btn bg="#16a34a" onClick={()=>{
+                    const cents=Math.round(tot*100);
+                    const data=JSON.stringify({amount_money:{amount:cents,currency_code:"AUD"},callback_url:VERCEL_URL,client_id:SQUARE_APP_ID,version:"1.3",notes:(cName||"Guest")+" - Coffee Cart"});
+                    const url="square-commerce-v1://payment/create?data="+encodeURIComponent(data);
+                    setSqPending(true);
+                    setTimeout(()=>{ window.location.href=url; },100);
+                  }}>💳 Charge {fmt(tot)} via Square</Btn>
                 : <Btn bg="#16a34a" onClick={()=>markPaid()}>Mark as Paid</Btn>
               }
             </div>
