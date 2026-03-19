@@ -315,7 +315,7 @@ export default function App() {
     setItemM(null);
   }
 
-  function squareCharge() {
+  function squareUrl() {
     const cents = Math.round(tot*100);
     const isAndroid = /android/i.test(navigator.userAgent);
     const data = {
@@ -325,12 +325,9 @@ export default function App() {
       version: "1.3",
       notes: (cName||"Guest")+" - Coffee Cart"
     };
-    const url = isAndroid
+    return isAndroid
       ? "intent://squareup.com/pos/charge?amount_money="+cents+"&currency_code=AUD&notes="+encodeURIComponent((cName||"Guest")+" - Coffee Cart")+"#Intent;scheme=https;package=com.squareup;end"
       : "square-commerce-v1://payment/create?data="+encodeURIComponent(JSON.stringify(data));
-    // Use location.href instead of window.open — works on mobile Safari
-    window.location.href = url;
-    setSqPending(true);
   }
 
   // ── Reports ─────────────────────────────────────────────────────
@@ -769,8 +766,10 @@ export default function App() {
           {!sqPending && (
             <div style={{display:"flex",gap:7}}>
               <Btn ghost onClick={()=>setChkOpen(false)}>Back</Btn>
-              {payMethod==="square"
-                ? <Btn bg="#16a34a" onClick={squareCharge}>💳 Charge {fmt(tot)} via Square</Btn>
+              {              payMethod==="square"
+                ? <a href={squareUrl()} onClick={()=>setSqPending(true)} style={{flex:1,padding:"11px 14px",borderRadius:9,border:"none",background:"#16a34a",color:"#fff",fontWeight:700,fontSize:13,cursor:"pointer",textAlign:"center",textDecoration:"none",display:"block"}}>
+                    💳 Charge {fmt(tot)} via Square
+                  </a>
                 : <Btn bg="#16a34a" onClick={()=>markPaid()}>Mark as Paid</Btn>
               }
             </div>
