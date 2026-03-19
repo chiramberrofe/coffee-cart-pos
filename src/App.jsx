@@ -755,11 +755,16 @@ export default function App() {
               <Btn ghost onClick={()=>setChkOpen(false)}>Back</Btn>
               {              payMethod==="square"
                 ? <Btn bg="#16a34a" onClick={()=>{
-                    const cents=Math.round(tot*100);
-                    const data=JSON.stringify({amount_money:{amount:cents,currency_code:"AUD"},callback_url:VERCEL_URL,client_id:SQUARE_APP_ID,version:"1.3",notes:(cName||"Guest")+" - Coffee Cart"});
-                    const url="square-commerce-v1://payment/create?data="+encodeURIComponent(data);
+                    const cents = Math.round(tot*100);
+                    const data  = JSON.stringify({
+                      amount_money: {amount:cents, currency_code:"AUD"},
+                      callback_url: "https://coffee-cart-pos.vercel.app",
+                      client_id:    "sq0idp-Wpq-JLMKTKsvs26TfkLfIA",
+                      version:      "1.3",
+                      notes:        (cName||"Guest")+" - Coffee Cart"
+                    });
                     setSqPending(true);
-                    setTimeout(()=>{ window.location.href=url; },100);
+                    setTimeout(()=>{ window.location.href="square-commerce-v1://payment/create?data="+encodeURIComponent(data); },100);
                   }}>💳 Charge {fmt(tot)} via Square</Btn>
                 : <Btn bg="#16a34a" onClick={()=>markPaid()}>Mark as Paid</Btn>
               }
