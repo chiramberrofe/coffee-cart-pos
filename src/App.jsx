@@ -328,7 +328,8 @@ export default function App() {
     const url = isAndroid
       ? "intent://squareup.com/pos/charge?amount_money="+cents+"&currency_code=AUD&notes="+encodeURIComponent((cName||"Guest")+" - Coffee Cart")+"#Intent;scheme=https;package=com.squareup;end"
       : "square-commerce-v1://payment/create?data="+encodeURIComponent(JSON.stringify(data));
-    window.open(url, "_blank");
+    // Use location.href instead of window.open — works on mobile Safari
+    window.location.href = url;
     setSqPending(true);
   }
 
