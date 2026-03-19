@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
-const SQUARE_APP_ID = "sq0idp-Wpq-JLMKTKsvs26TfkLfIA";
+const VERCEL_URL = "https://coffee-cart-pos.vercel.app";
 
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDP8DZ6zvYUJWDb2jE6S1AExHia4xxBElM",
@@ -320,7 +320,7 @@ export default function App() {
     const isAndroid = /android/i.test(navigator.userAgent);
     const data = {
       amount_money: { amount: cents, currency_code: "AUD" },
-      callback_url: "https://claude.ai/chat/21b4b047-822f-4354-8bdc-b33418cbf723",
+      callback_url: VERCEL_URL,
       client_id: SQUARE_APP_ID,
       version: "1.3",
       notes: (cName||"Guest")+" - Coffee Cart"
